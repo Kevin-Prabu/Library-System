@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Library Dashboard</title>
+    <style>
+        body {
+            margin: 0;
+            font-family: "Courier New", monospace;
+            display: flex;
+            height: 100vh;
+            overflow: hidden;
+        }
+
+        .sidebar {
+            width: 200px;
+            background-color: #6b421d;
+            padding: 20px 10px;
+            color: white;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .profile-pic {
+            width: 70px;
+            height: 70px;
+            border-radius: 50%;
+            background-color: #ccc;
+            margin-bottom: 25px;
+        }
+
+        .sidebar button {
+            width: 160px;
+            padding: 8px;
+            margin: 6px 0;
+            border: 2px solid black;
+            border-radius: 6px;
+            background: white;
+            cursor: pointer;
+            font-size: 15px;
+        }
+
+        .content {
+            flex: 1;
+            background-color: #d98634;
+            padding: 20px;
+            overflow-y: auto;
+            font-size: 22px;
+        }
+
+        .content::-webkit-scrollbar { display: none; }
+    </style>
+</head>
+
+<body>
+
+    <div class="sidebar">
+        <img src="the img.png" class="profile-pic">
+
+        <button onclick="loadPage('home.html')">HOME</button>
+        <button onclick="loadPage('current_books.html')">Current Books</button>
+        <button onclick="loadPage('latest.html')">Latest Releases</button>
+        <button onclick="loadPage('titles.html')">New Titles</button>
+        <button onclick="loadPage('author.html')">New Author</button>
+        <button onclick="loadPage('purchse.html')">Purchase</button>
+        <button onclick="loadPage('requests.html')">Requests</button>
+        <button onclick="loadPage('location.html')">Location</button>
+    </div>
+
+    <div class="content" id="content-area">
+        Welcome! Select a menu option.
+    </div>
+
+    <script>
+        function loadPage(page) {
+            fetch(page)
+                .then(res => res.text())
+                .then(data => {
+                    document.getElementById("content-area").innerHTML = data;
+                })
+                .catch(() => {
+                    document.getElementById("content-area").innerHTML = "Page not found.";
+                });
+        }
+    </script>
+
+</body>
+</html>

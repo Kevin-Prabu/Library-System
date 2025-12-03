@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+<title>Library Portal — Carousel Version</title>
+<link rel="preconnect" href="https://fonts.gstatic.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            --accent: #f4994a;
+            --accent-dark: #e4832d;
+            --bg: #fff4eb;
+        }
+
+        body {
+            margin: 0;
+            font-family: "Inter", sans-serif;
+            background: linear-gradient(180deg, #f6a45b 0%, #f08f3b 100%);
+        }
+
+            .hero {
+            position: relative;
+            width: 100%;
+            max-width: 1200px;
+            height: 380px;
+            margin: 30px auto;
+            overflow: hidden;
+            border-radius: 20px;
+            box-shadow: 0 8px 24px rgba(0,0,0,0.25);
+        }
+
+            .carousel-track {
+            display: flex;
+            width: 100%;
+            height: 100%;
+            transition: transform 0.6s ease;
+        }
+
+            .slide {
+            min-width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border-radius: 20px;
+        }
+
+            .carousel-btn {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            background: rgba(0,0,0,0.4);
+            color: #fff;
+            border: none;
+            font-size: 26px;
+            cursor: pointer;
+            border-radius: 50%;
+            width: 46px;
+            height: 46px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: background 0.3s;
+            z-index: 5;
+        }
+
+            .carousel-btn:hover {
+            background: rgba(0,0,0,0.6);
+        }
+
+            #prevBtn { left: 15px; }
+            #nextBtn { right: 15px; }
+
+            .hero__title {
+            position: absolute;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            color: #fff;
+            font-weight: 700;
+            font-size: 30px;
+            text-shadow: 0 4px 12px rgba(0,0,0,0.6);
+        }
+
+
+            nav {
+            width: 90%;
+            max-width: 1000px;
+            background: #fff;
+            border-radius: 40px;
+            padding: 12px 18px;
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            margin: 20px auto;
+            box-shadow: 0 6px 16px rgba(0,0,0,0.2);
+        }
+
+            nav a {
+            text-decoration: none;
+            color: #333;
+            font-weight: 600;
+            transition: color 0.3s;
+            }
+        nav a:hover { color: var(--accent-dark); }
+
+            #login-box {
+            background-color: white;
+            width: 320px;
+            margin: 40px auto;
+            padding: 25px;
+            border-radius: 15px;
+            box-shadow: 0px 4px 12px rgba(0,0,0,0.3);
+            text-align: center;
+        }
+
+            #login-box h2 {
+            margin-bottom: 20px;
+            color: var(--accent-dark);
+        }
+
+        .input-field {
+            width: 90%;
+            padding: 10px;
+            margin: 10px 0;
+            border: 2px solid var(--accent);
+            border-radius: 8px;
+            outline: none;
+        }
+
+        .btn {
+            background-color: var(--accent);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: 0.3s;
+            font-weight: bold;
+        }
+
+        .btn:hover {
+            background-color: var(--accent-dark);
+        }
+
+        footer {
+            text-align: center;
+            padding: 10px;
+            color: #222;
+            font-size: 14px;
+        }
+    </style>
+    </head>
+    <body>
+
+        <header style="text-align:center; margin-top:20px;">
+            <h1 style="color:white;">📚 Library Portal</h1>
+        </header>
+
+        <section class="hero">
+            <div class="carousel-track">
+                <img src="img1.png" alt="Library 1" class="slide">
+                <img src="img2.png" alt="Library 2" class="slide">
+                <img src="img3.png" alt="Library 3" class="slide">
+            </div>
+        <button class="carousel-btn" id="prevBtn">&#10094;</button>
+        <button class="carousel-btn" id="nextBtn">&#10095;</button>
+        <div class="hero__title">Welcome to the Library</div>
+        </section>
+
+<nav>
+        <a href="#">Home</a>
+        <a href="#">Books</a>
+        <a href="#">Categories</a>
+        <a href="#">Login</a>
+        <a href="#">Contact</a>
+</nav>
+
+<div id="login-box">
+        <h2>Login</h2>
+        <form action="details.php" method="POST">
+    <input type="text" name="username" placeholder="Username" class="input-field" required><br>
+    <input type="password" name="password" placeholder="Password" class="input-field" required><br>
+    <button type="submit" class="btn">Login</button>
+</form>
+
+</div>
+
+        <script>
+        form.addEventListener('submit', function (event) {
+    event.preventDefault();
+
+    const username = document.getElementById('name').value;
+    const password = document.getElementById('password').value;
+
+    var ajax = new XMLHttpRequest();
+    ajax.timeout = 6000;
+        ajax.ontimeout = function(){
+            alert("its out")
+        }
+    ajax.open('POST', 'details.php', true);
+    ajax.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+
+    ajax.onreadystatechange = function () {
+        if (ajax.readyState === 4 && ajax.status === 200) {
+            alert(ajax.responseText);
+        }
+    };
+
+    ajax.send(
+        "username=" + encodeURIComponent(username) +
+        "&password=" + encodeURIComponent(password)
+    );
+
+    /*Lab 2*/
+
+});
+
+        </script>
+
+    </body>
+</html>

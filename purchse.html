@@ -1,0 +1,93 @@
+<!-- BOOK STORE AREA -->
+<div id="store-box" style="width: 100%; max-width: 1100px; margin: auto; margin-top:30px;">
+
+    <!-- PURCHASE BOX -->
+    <div id="purchase-area"
+         style="display:none; border:2px solid #333; padding:20px; border-radius:12px; margin-bottom:20px;">
+        <h2>Purchase Book</h2>
+        <img id="p-img" src="" width="130" style="border-radius:8px;">
+        <h3 id="p-title" style="margin:10px 0 5px;"></h3>
+        <p id="p-price"></p>
+
+        <button onclick="confirmPurchase()"
+                style="padding:10px 18px; background:black; color:white; border:none; border-radius:8px;">
+            Confirm Purchase
+        </button>
+
+        <!-- AJAX RESPONSE -->
+        <p id="purchase-response" style="margin-top:15px; font-weight:bold;"></p>
+    </div>
+
+    <!-- BOOK GRID -->
+    <h2 style="margin-bottom:10px;">Books Available</h2>
+    <div id="book-grid"
+         style="display:grid; grid-template-columns:repeat(auto-fill, minmax(160px, 1fr)); gap:20px;">
+    </div>
+</div>
+
+
+<script>
+    // SAMPLE BOOK DATA (replace with your backend/library data)
+    const books = [
+        { id: 1, title: "Harry Potter", price: "499", img: "https://source.unsplash.com/200x300/?harrypotter" },
+        { id: 2, title: "Narnia", price: "399", img: "https://source.unsplash.com/201x300/?fantasy" },
+        { id: 3, title: "Atomic Habits", price: "299", img: "https://source.unsplash.com/202x300/?habits" },
+        { id: 4, title: "Fairy Tales", price: "199", img: "https://source.unsplash.com/203x300/?fairytale" }
+    ];
+
+    let selected = null;
+
+    // RENDER GRID
+    const grid = document.getElementById("book-grid");
+    books.forEach((b, i) => {
+        grid.innerHTML += `
+            <div style="border:1px solid #aaa; padding:10px; border-radius:10px; text-align:center;">
+                <img src="${b.img}" width="120" style="border-radius:8px;">
+                <h4>${b.title}</h4>
+                <p>₹${b.price}</p>
+                <button onclick="selectBook(${i})"
+                        style="padding:6px 12px; background:#333; color:white; border:none; border-radius:8px;">
+                    Purchase
+                </button>
+            </div>
+        `;
+    });
+
+    // SELECT A BOOK
+    function selectBook(i) {
+        selected = books[i];
+        document.getElementById("purchase-area").style.display = "block";
+        document.getElementById("p-img").src = selected.img;
+        document.getElementById("p-title").innerText = selected.title;
+        document.getElementById("p-price").innerText = "Price: ₹" + selected.price;
+    }
+
+    // AJAX PURCHASE
+    function confirmPurchase() {
+        if (!selected) return;
+
+        const responseBox = document.getElementById("purchase-response");
+        responseBox.innerText = "Processing...";
+
+        const xhr = new XMLHttpRequest();
+        xhr.open("POST", "purchase.php");   // <-- your PHP file endpoint
+        xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+
+        xhr.onload = function() {
+            if (xhr.status === 200) {
+                responseBox.style.color = "green";
+                responseBox.innerText = xhr.responseText;
+            } else {
+                responseBox.style.color = "red";
+                responseBox.innerText = "Purchase Failed! Error " + xhr.status;
+            }
+        };
+
+        xhr.onerror = function() {
+            responseBox.style.color = "red";
+            responseBox.innerText = "Network Error!";
+        };
+
+        xhr.send("book_id=" + selected.id + "&title=" + selected.title);
+    }
+</script>

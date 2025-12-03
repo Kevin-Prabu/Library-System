@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html>
+<head>
+<style>
+    body {
+        background: #0d1117;
+        color: white;
+        font-family: Consolas, monospace;
+        padding: 20px;
+    }
+
+    h1 {
+        font-size: 32px;
+        margin-bottom: 20px;
+    }
+
+    #logBox {
+        background: #000;
+        border: 1px solid #222;
+        padding: 20px;
+        border-radius: 8px;
+        min-height: 200px;
+        white-space: pre-line; 
+        overflow: hidden; /* NO SCROLLBAR */
+    }
+
+    #inputArea {
+        margin-top: 30px;
+        background: #000;
+        border: 1px solid #222;
+        padding: 20px;
+        border-radius: 8px;
+    }
+
+    #testInput {
+        width: 100%;
+        padding: 12px;
+        background: #1a1f24;
+        color: white;
+        border: 1px solid #444;
+        border-radius: 6px;
+        font-size: 16px;
+    }
+</style>
+</head>
+
+<body>
+
+<h1>Admin Server Test Control Panel</h1>
+
+<div id="logBox">Awaiting command...</div>
+
+<div id="inputArea">
+    <p>Type a server test code (200, 404, 500, 403, timeout):</p>
+    <input type="text" id="testInput" placeholder="Enter test code...">
+</div>
+
+<script>
+document.getElementById("testInput").addEventListener("keydown", function (e) {
+    if (e.key === "Enter") {
+        let code = this.value.trim();
+        runTest(code);
+        this.value = "";
+    }
+});
+
+function log(msg) {
+    document.getElementById("logBox").innerHTML += "\n> " + msg;
+}
+
+function runTest(code) {
+    log("Testing server: " + code);
+
+    let url = "";
+    if (code === "200") url = "sample.txt";
+    else if (code === "404") url = "nofile.txt";
+    else if (code === "500") url = "https://httpstat.us/500";
+    else if (code === "403") url = "https://httpstat.us/403";
+    else if (code === "timeout") url = "https://httpstat.us/200?sleep=6000";
+    else {
+        log("Unknown code: " + code);
+        return;
+    }
+
+    let x = new XMLHttpRequest();
+    x.timeout = 3000;
+
+    x.onreadystatechange = function () {
+        if (x.readyState === 4) {
+            if (x.status === 200)
+                log("200 OK — " + x.responseText);
+            else if (x.status === 404)
+                log("404 Not Found");
+            else if (x.status === 500)
+                log("500 Server Error");
+            else if (x.status === 403)
+                log("403 Forbidden");
+            else
+                log("Unknown Code: " + x.status);
+        }
+    };
+
+    x.onerror = function () {
+        log("Network Error");
+    };
+
+    x.ontimeout = function () {
+        log("Timeout — Server too slow");
+    };
+
+    x.open("GET", url, true);
+    x.send();
+}
+</script>
+
+</body>
+</html>
